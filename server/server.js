@@ -1,35 +1,58 @@
 const { GraphQLServer } = require('graphql-yoga');
 
 const messages = [];
+const conversations = [];
 
 const typeDefs = `
+type Conversation {
+    id: ID!
+    messages: [Message!]
+}
+
 type Message {
     id: ID!
-    user: String!,
+    user: String!
     content: String!
 }
 
 type Query {
- messages: [Message!]
+ messages(conversationId:ID!): [Message!]
+ conversations: [Conversation!]
 }
 
 type Mutation {
- postMessage(user: String!, content: String!): ID!
+ postMessage(conversationId:ID!, user: String!, content: String!): ID!
+createConversation: ID!
 }
 `;
 
 const resolvers = {
 	Query: {
-		messages: () => messages,
+		messages: (parent, { conversationId }) => {
+			const foundConversation = conversations.find((conversation) => conversation.id === conversationId);
+			return foundConversation.messages;
+		},
+		conversations: () => conversations,
 	},
 	Mutation: {
-		postMessage: () => {
-			const id = messages.length;
-			messages.push({
+		postMessage: (parent, { conversationId, user, content }) => {
+			const foundConversation = conversations.find((conversation) => conversation.id === conversationId);
+			const id = Math.random().toString(26).slice(2);
+			foundConversation.messages.push({
 				id,
 				user,
 				content,
 			});
+			return id;
+		},
+		createConversation: () => {
+			const id = Math.random().toString(26).slice(2);
+			console.log(id);
+			conversations.push({
+				id,
+				messages: [],
+			});
+			return id;
 		},
 	},
 };
