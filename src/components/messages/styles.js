@@ -4,23 +4,20 @@ export const useStyles = makeStyles({
 	list: {
 		width: '100%',
 		maxWidth: '36ch',
-		backgroundColor: 'red',
 		overflow: 'auto',
 	},
 	header: {
 		display: 'flex',
 		justifyContent: 'space-between',
 		backgroundColor: 'grey',
+		height: '50px',
 	},
 	body: {
 		display: 'flex',
 		justifyContent: 'space-between',
-		backgroundColor: 'green',
-		height: '60vh',
+		height: '400px',
 	},
-	input: {
-		backgroundColor: 'green',
-	},
+
 	footer: {
 		display: 'flex',
 		justifyContent: 'space-between',

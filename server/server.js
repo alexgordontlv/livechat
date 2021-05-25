@@ -6,8 +6,10 @@ const conversations = [];
 const typeDefs = `
 type Conversation {
     id: ID!
+    userId: ID!
     messages: [Message!]
 }
+
 
 type Message {
     id: ID!
@@ -22,7 +24,7 @@ type Query {
 
 type Mutation {
  postMessage(conversationId:ID!, user: String!, content: String!): ID!
-createConversation: ID!
+createConversation(userId: ID!): ID!
 }
 
 type Subscription {
@@ -57,24 +59,25 @@ const resolvers = {
 			return id;
 		},
 
-		createConversation: () => {
+		createConversation: (parent, { userId }) => {
 			const id = Math.random().toString(26).slice(2);
 			console.log(id);
 			conversations.push({
 				id,
+				userId,
 				messages: [],
 			});
+			subscribers.forEach((fn) => fn());
 			return id;
 		},
 	},
 	Subscription: {
-		messages: {
-			subscribe: (parent, { conversationId }, { pubsub }) => {
-				const channel = Math.random().toString(36).slice(2, 15);
-				const foundConversation = conversations.find((conversation) => conversation.id === conversationId);
+		conversations: {
+			subscribe: (parent, args, { pubsub }) => {
+				const channel = Math.random().toString(26).slice(2);
 
-				onMessagesUpdates(() => pubsub.publish(channel, { ...foundConversation }));
-				setTimeout(() => pubsub.publish(channel, { ...foundConversation }), 0);
+				onMessagesUpdates(() => pubsub.publish(channel, { conversations }));
+				setTimeout(() => pubsub.publish(channel, { conversations }), 0);
 				return pubsub.asyncIterator(channel);
 			},
 		},
