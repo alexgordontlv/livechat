@@ -22,6 +22,7 @@ const Conversations = ({ setConversationId, conversations, user }) => {
 			setConversationArray(conversations);
 		}
 	}, [conversations]);
+
 	const [createConversation] = useMutation(CREATE_CONVERSATIONS, {
 		variables: { userId: user.userId },
 	});
@@ -38,9 +39,9 @@ const Conversations = ({ setConversationId, conversations, user }) => {
 				<List className={classes.list}>
 					{conversationArray.map((conversation, idx) => (
 						<div key={conversation.id}>
-							<ListItem alignItems='flex-start' onClick={() => setConversationId(conversation.id)}>
+							<ListItem alignItems='flex-start' onClick={() => setConversationId(conversation.id)} className={classes.listItem}>
 								<ListItemAvatar>
-									<Avatar alt='Admin' src='/static/images/avatar/1.jpg' />
+									<Avatar alt='Admin' src='https://i.ibb.co/dJsP65h/cahtbot2.png' />
 								</ListItemAvatar>
 								<ListItemText
 									primary={conversation.messages.length > 0 ? conversation.messages[conversation.messages.length - 1].content : 'Empty Chat'}

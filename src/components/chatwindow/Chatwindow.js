@@ -26,6 +26,7 @@ const ChatWindow = ({ openChat }) => {
 	const [user, setUser] = useState({ role: 'customer', userId: '' });
 	const [conversationId, setConversationId] = useState(null);
 
+	//Better option to user LocalStorage... I suppose
 	const userId = useMemo(() => Math.random().toString(26).slice(2), []);
 
 	useEffect(() => {
@@ -37,7 +38,7 @@ const ChatWindow = ({ openChat }) => {
 	}, []);
 	const { loading, error, data } = useSubscription(GET_CONVERSATIONS);
 
-	if (loading) return <div>Loading...</div>;
+	if (loading) return null;
 	if (error) return `Error! ${error}`;
 
 	return openChat

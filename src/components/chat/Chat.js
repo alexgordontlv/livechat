@@ -6,6 +6,7 @@ import { ApolloProvider, InMemoryCache, ApolloClient, gql, useMutation } from '@
 import { WebSocketLink } from '@apollo/client/link/ws';
 import CloseIcon from '@material-ui/icons/Close';
 import ChatWindow from '../chatwindow/Chatwindow';
+import { useStyles } from './styles';
 
 const link = new WebSocketLink({
 	uri: 'ws://localhost:4000/',
@@ -21,13 +22,14 @@ const client = new ApolloClient({
 });
 
 const Chat = () => {
+	const classes = useStyles();
 	const [openChat, setOpenChat] = useState(false);
 	const handleOpenClose = () => {
 		setOpenChat((state) => !state);
 	};
 	return (
 		<>
-			<Fab color='primary' aria-label='open-chat' onClick={handleOpenClose}>
+			<Fab color='primary' aria-label='open-chat' onClick={handleOpenClose} className={classes.root}>
 				{openChat ? <CloseIcon /> : <ChatIcon />}
 			</Fab>
 			<ChatWindow openChat={openChat} />

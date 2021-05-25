@@ -28,7 +28,6 @@ const Messages = ({ conversationId, setConversationId, messages, user }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log('submit', content);
 		postMessage({
 			variables: { conversationId, user: user.role, content },
 		});
@@ -56,7 +55,7 @@ const Messages = ({ conversationId, setConversationId, messages, user }) => {
 								}}>
 								{message.user !== 'customer' && (
 									<ListItemAvatar>
-										<Avatar alt='Admin' src='/static/images/avatar/1.jpg' />
+										<Avatar alt='Admin' src='https://i.ibb.co/dJsP65h/cahtbot2.png' />
 									</ListItemAvatar>
 								)}
 

@@ -11,6 +11,11 @@ export const useStyles = makeStyles({
 		justifyContent: 'space-between',
 		backgroundColor: 'grey',
 	},
+	listItem: {
+		'&:hover': {
+			cursor: 'pointer',
+		},
+	},
 	body: {
 		display: 'flex',
 		justifyContent: 'space-between',
