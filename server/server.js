@@ -1,4 +1,4 @@
-const { GraphQLServer } = require('graphql-yoga');
+const { GraphQLServer, PubSub } = require('graphql-yoga');
 
 const messages = [];
 const conversations = [];
@@ -24,7 +24,15 @@ type Mutation {
  postMessage(conversationId:ID!, user: String!, content: String!): ID!
 createConversation: ID!
 }
+
+type Subscription {
+    messages(conversationId:ID!): [Message!]
+    conversations: [Conversation!]
+}
 `;
+
+const subscribers = [];
+const onMessagesUpdates = (fn) => subscribers.push(fn);
 
 const resolvers = {
 	Query: {
@@ -36,6 +44,7 @@ const resolvers = {
 	},
 	Mutation: {
 		postMessage: (parent, { conversationId, user, content }) => {
+			console.log('posting');
 			const foundConversation = conversations.find((conversation) => conversation.id === conversationId);
 			const id = Math.random().toString(26).slice(2);
 			foundConversation.messages.push({
@@ -43,8 +52,11 @@ const resolvers = {
 				user,
 				content,
 			});
+			subscribers.forEach((fn) => fn());
+
 			return id;
 		},
+
 		createConversation: () => {
 			const id = Math.random().toString(26).slice(2);
 			console.log(id);
@@ -55,8 +67,22 @@ const resolvers = {
 			return id;
 		},
 	},
+	Subscription: {
+		messages: {
+			subscribe: (parent, { conversationId }, { pubsub }) => {
+				const channel = Math.random().toString(36).slice(2, 15);
+				const foundConversation = conversations.find((conversation) => conversation.id === conversationId);
+
+				onMessagesUpdates(() => pubsub.publish(channel, { ...foundConversation }));
+				setTimeout(() => pubsub.publish(channel, { ...foundConversation }), 0);
+				return pubsub.asyncIterator(channel);
+			},
+		},
+	},
 };
-const server = new GraphQLServer({ typeDefs, resolvers });
+
+const pubsub = new PubSub();
+const server = new GraphQLServer({ typeDefs, resolvers, context: { pubsub } });
 server.start(({ port }) => {
-	console.log(`Server is working on port:${port}`);
+	console.log(`Server on http://localhost:${port}/`);
 });

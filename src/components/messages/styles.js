@@ -4,7 +4,8 @@ export const useStyles = makeStyles({
 	list: {
 		width: '100%',
 		maxWidth: '36ch',
-		backgroundColor: 'white',
+		backgroundColor: 'red',
+		overflow: 'auto',
 	},
 	header: {
 		display: 'flex',
@@ -14,6 +15,15 @@ export const useStyles = makeStyles({
 	body: {
 		display: 'flex',
 		justifyContent: 'space-between',
-		height: '70vh',
+		backgroundColor: 'green',
+		height: '60vh',
+	},
+	input: {
+		backgroundColor: 'green',
+	},
+	footer: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		borderTop: '1px solid black',
 	},
 });
