@@ -11,10 +11,9 @@ const CREATE_CONVERSATIONS = gql`
 	}
 `;
 
-const Rooms = ({ setConversationId, conversations, user }) => {
+const Conversations = ({ setConversationId, conversations, user }) => {
 	const [conversationArray, setConversationArray] = useState([]);
 	const classes = useStyles();
-	console.log(conversationArray);
 	useEffect(() => {
 		if (user.role !== 'Admin') {
 			const filteredConversations = conversations.filter((cnv) => cnv.userId === user.userId);
@@ -56,4 +55,4 @@ const Rooms = ({ setConversationId, conversations, user }) => {
 	);
 };
 
-export default Rooms;
+export default Conversations;

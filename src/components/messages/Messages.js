@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import { useStyles } from './styles';
-import { FormControl, TextField, IconButton, List, ListItem, Divider, ListItemText, ListItemAvatar, Avatar } from '@material-ui/core';
-import { useSubscription, gql, useMutation } from '@apollo/client/';
+import { TextField, IconButton, List, ListItem, Divider, ListItemText, ListItemAvatar, Avatar } from '@material-ui/core';
+import { gql, useMutation } from '@apollo/client/';
 import { CardActions, CardContent } from '@material-ui/core';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import SendIcon from '@material-ui/icons/Send';
