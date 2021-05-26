@@ -12,26 +12,34 @@ const dbURI = '';
 	const subscribers = [];
 
 	const updateConversations = async () => {
-		conversations = await Conversations.find();
+		try {
+			conversations = await Conversations.find();
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	const onMessagesUpdates = (fn) => subscribers.push(fn);
 
 	const resolvers = {
 		Query: {
-			conversations: async () => conversations,
+			conversations: () => conversations,
 		},
 		Mutation: {
 			postMessage: async (parent, { conversationId, user, content }) => {
-				const foundConversation = await Conversations.findOne({ _id: conversationId });
-				foundConversation.messages.push({
-					user,
-					content,
-				});
-				const res = await foundConversation.save();
-				await updateConversations();
-				subscribers.forEach((fn) => fn());
-				return res.id;
+				try {
+					const foundConversation = await Conversations.findOne({ _id: conversationId });
+					foundConversation.messages.push({
+						user,
+						content,
+					});
+					const res = await foundConversation.save();
+					await updateConversations();
+					subscribers.forEach((fn) => fn());
+					return res.id;
+				} catch (err) {
+					console.log(err);
+				}
 			},
 
 			createConversation: async (parent, { userId }) => {
@@ -39,10 +47,14 @@ const dbURI = '';
 					userId: userId,
 					messages: [],
 				});
-				const res = await conversation.save();
-				await updateConversations();
-				subscribers.forEach((fn) => fn());
-				return res.id;
+				try {
+					const res = await conversation.save();
+					await updateConversations();
+					subscribers.forEach((fn) => fn());
+					return res.id;
+				} catch (err) {
+					console.log(err);
+				}
 			},
 		},
 		Subscription: {
