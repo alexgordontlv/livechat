@@ -39,7 +39,7 @@ const ChatWindow = ({ openChat }) => {
 	}, []);
 
 	const { loading, error, data } = useSubscription(GET_CONVERSATIONS);
-
+	console.log(data);
 	if (loading) return null;
 	if (error) return `Error! ${error}`;
 
